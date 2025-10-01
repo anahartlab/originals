@@ -1,0 +1,111 @@
+.u-section-1 .u-sheet-1 {
+  min-height: 208px;
+}
+
+.u-section-1 .u-text-1 {
+  margin: 22px auto 0;
+}
+
+.u-section-1 .u-text-2 {
+  width: 899px;
+  margin: 23px auto 34px;
+}
+
+@media (max-width: 991px) {
+  .u-section-1 .u-sheet-1 {
+    min-height: 264px;
+  }
+
+  .u-section-1 .u-text-1 {
+    width: auto;
+    margin-top: 27px;
+    margin-left: 27px;
+    margin-right: 27px;
+  }
+
+  .u-section-1 .u-text-2 {
+    width: auto;
+    margin: 27px 0 23px;
+  }
+}
+
+@media (max-width: 767px) {
+  .u-section-1 .u-text-1 {
+    margin-top: 17px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .u-section-1 .u-text-2 {
+    margin-top: 23px;
+    margin-bottom: 30px;
+  }
+}.u-section-2 .u-sheet-1 {
+  min-height: 400px;
+}
+
+.u-section-2 .u-audio-1 {
+  width: 500px;
+  margin-bottom: 60px;
+}
+
+@media (max-width: 575px) {
+  .u-section-2 .u-audio-1 {
+    width: 340px;
+  }
+}
+#pulse-circle {
+  width: 180px;
+  height: 180px;
+  margin: 30px auto;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #ff00cc, #3333ff, #00ffcc, #ffcc00);
+  background-size: 400% 400%;
+  animation: waveMove 8s ease infinite;
+  transition: transform 0.1s ease-out;
+  box-shadow: 0 0 25px #99ffcc88;
+}
+
+@keyframes waveMove {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@media (max-width: 575px) {
+  #pulse-fractal {
+    height: 10px;
+    border-radius: 5px;
+    margin: 30px auto;
+  }
+  .next-track-button {
+    font-size: 14px;
+    padding: 8px 20px;
+  }
+}
+
+#pulse-fractal {
+  width: 90%;
+  max-width: 400px; /* или сколько было */
+  height: 16px;      /* в 3 раза меньше, было ~100px */
+  margin: 40px auto;
+  border-radius: 8px;
+  background: linear-gradient(
+    270deg,
+    #ff0066,
+    #ffcc00,
+    #00ffcc,
+    #3300ff,
+    #ff0066
+  );
+  background-size: 800% 800%;
+  animation: fractalFlow 20s ease infinite;
+  transition: transform 0.1s ease-out;
+  box-shadow: 0 0 30px #00ffff88;
+}
+
+@keyframes fractalFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
