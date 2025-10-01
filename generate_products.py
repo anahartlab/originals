@@ -37,7 +37,7 @@ with open(csv_path, newline="", encoding="utf-8") as csvfile:
         type = row["Type"].strip()
         material = row["Material"].strip()
         paint = row["Paint"].strip()
-        stock = row["Place"].strip()
+        place = row["Place"].strip()
         folder_path = os.path.join(images_dir, name)
 
         if not os.path.isdir(folder_path):
@@ -124,7 +124,7 @@ with open(csv_path, newline="", encoding="utf-8") as csvfile:
                       <h3 class="u-align-center u-text u-text-1">{title}</h3>
                       <p class="u-align-left u-text u-text-2">{description}</p>
                       <h3 class="u-align-center-md u-align-center-sm u-align-center-xs u-align-left-lg u-align-left-xl u-text u-text-default-lg u-text-default-xl u-text-3">{price} ₽</h3>
-                      <p class="u-align-center u-text u-text-availability">В наличии {stock} шт.</p>
+                      <p class="u-align-center u-text u-text-availability">({size},{paint},{material},{type},{place})</p>
                       <div class="u-align-center">
                         <a href="https://donate.stream/anahart" class="u-btn u-button-style u-custom-font u-heading-font u-hover-palette-1-light-1 u-palette-1-base u-radius-50 u-btn-1" style="border-radius: 100px;" title="Укажите нужную сумму и наименование товара в комментарии к донату">Оплатить</a>
                       </div>
@@ -143,7 +143,22 @@ with open(csv_path, newline="", encoding="utf-8") as csvfile:
             html_content[:insert_index] + block + "\n" + html_content[insert_index:]
         )
         insert_index += len(block)
+# === Добавление навигационного меню после </header> ===
+nav_menu = "<nav class='u-nav u-unstyled' style='display:flex; justify-content:center; margin:20px 0;'><ul class='u-unstyled' style='list-style:none; padding:0; display:flex; flex-wrap:wrap; gap:15px;'>"
+for name, title in [
+    (row["Name"].strip(), row["Title"].strip())
+    for row in csv.DictReader(open(csv_path, newline="", encoding="utf-8"))
+]:
+    nav_menu += f'<li><a href="#{name}">{title}</a></li>'
+nav_menu += "</ul></nav>"
 
+header_end = html_content.lower().find("</header>")
+if header_end != -1:
+    html_content = (
+        html_content[: header_end + 9] + nav_menu + html_content[header_end + 9 :]
+    )
+else:
+    html_content = nav_menu + html_content
 # === Сохраняем результат ===
 with open(html_path, "w", encoding="utf-8") as f:
     f.write(html_content)
