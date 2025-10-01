@@ -88,11 +88,11 @@ with open(csv_path, newline="", encoding="utf-8") as csvfile:
                               <img class="u-back-image u-expanded" src="images/{name}/{image_file}">
                             </div>
                             <div class="u-align-center u-over-slide u-shading u-valign-bottom u-over-slide-{i+1}"></div>
-                            <style data-mode="XL"></style>
-                            <style data-mode="LG"></style>
-                            <style data-mode="MD"></style>
-                            <style data-mode="SM"></style>
-                            <style data-mode="XS"></style>
+                              <style data-mode="XL"></style>
+                              <style data-mode="LG"></style>
+                              <style data-mode="MD"></style>
+                              <style data-mode="SM"></style>
+                              <style data-mode="XS"></style>
                           </div>"""
             carousel_items += item_div + "\n"
 
