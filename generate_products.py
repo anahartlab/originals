@@ -116,7 +116,7 @@ with open(csv_path, newline="", encoding="utf-8") as csvfile:
                       <div class="custom-expanded u-carousel u-gallery u-gallery-slider u-layout-carousel u-lightbox u-no-transition u-show-text-none u-gallery-{name}" data-interval="5000" data-u-ride="carousel" id="{carousel_id}">
                         <ol class="u-absolute-hcenter u-carousel-indicators u-carousel-indicators-1">
 {carousel_indicators}                        </ol>
-                        <div class="u-carousel-inner u-gallery-inner u-gallery-inner-1" role="listbox">
+                        <div class="u-carousel-inner u-gallery-inner u-gallery-{name}" role="listbox">
 {carousel_items}                        </div>
                         <a class="u-absolute-vcenter u-carousel-control u-carousel-control-prev u-grey-70 u-icon-circle u-opacity u-opacity-70 u-spacing-10 u-text-white u-carousel-control-1" href="#{carousel_id}" role="button" data-u-slide="prev">
                           <span aria-hidden="true">
