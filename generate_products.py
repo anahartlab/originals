@@ -35,61 +35,64 @@ if insert_index == -1:
 
 # === Читаем CSV ===
 with open(csv_path, newline="", encoding="utf-8") as csvfile:
-    reader = csv.DictReader(csvfile)
-    for row in reader:
-        name = row["Name"].strip()
-        title = row["Title"].strip()
-        description = row["Description"].strip()
-        size = row["Size"].strip()
-        paint = row["Paint"].strip()
-        material = row["Material"].strip()
-        type_ = row["Type"].strip()
-        price = row["Price"].strip()
-        place = row["Place"].strip()
+    reader = list(csv.DictReader(csvfile))
 
-        # Поиск папки с игнорированием регистра
-        folder_path = None
-        for folder in os.listdir(images_dir):
-            if folder.lower() == name.lower() and os.path.isdir(os.path.join(images_dir, folder)):
-                folder_path = os.path.join(images_dir, folder)
-                real_folder_name = folder
-                break
+for row in reader:
+    name = row["Name"].strip()
+    title = row["Title"].strip()
+    description = row["Description"].strip()
+    size = row["Size"].strip()
+    paint = row["Paint"].strip()
+    material = row["Material"].strip()
+    type_ = row["Type"].strip()
+    price = row["Price"].strip()
+    place = row["Place"].strip()
 
-        if not folder_path:
-            print(f"⚠️  Пропущен '{name}' — папка '{os.path.join(images_dir, name)}' не найдена.")
-            continue
+    # Поиск папки с игнорированием регистра
+    folder_path = None
+    real_folder_name = None
+    for folder in os.listdir(images_dir):
+        if folder.lower() == name.lower() and os.path.isdir(os.path.join(images_dir, folder)):
+            folder_path = os.path.join(images_dir, folder)
+            real_folder_name = folder
+            break
 
-        images = [
-            f
-            for f in sorted(os.listdir(folder_path))
-            if os.path.splitext(f)[1].lower() in valid_exts
-        ]
-        if not images:
-            print(f"⚠️  Пропущен '{name}' — нет изображений.")
-            continue
+    if not folder_path:
+        print(f"⚠️  Пропущен '{name}' — папка '{os.path.join(images_dir, name)}' не найдена.")
+        continue
 
-        # Удаление существующего блока по id="{name}"
-        start_tag = f'<section class="u-clearfix u-section-16" id="{name}">'
-        end_tag = "</section>"
-        start_pos = html_content.find(start_tag)
-        if start_pos != -1:
-            end_pos = html_content.find(end_tag, start_pos)
-            if end_pos != -1:
-                html_content = (
-                    html_content[:start_pos] + html_content[end_pos + len(end_tag) :]
-                )
-                insert_index = html_content.lower().find("<footer")
+    images = []
+    for f in sorted(os.listdir(folder_path)):
+        ext = os.path.splitext(f)[1].lower()
+        if ext in valid_exts:
+            images.append(f)
 
-        carousel_id = f"carousel-{name}"
-        carousel_indicators = ""
-        carousel_items = ""
+    if not images:
+        print(f"⚠️  Пропущен '{name}' — нет изображений.")
+        continue
 
-        for i, image_file in enumerate(images):
-            active_class = "u-active" if i == 0 else ""
-            indicator_li = f'<li data-u-target="#{carousel_id}" data-u-slide-to="{i}" class="{active_class} u-grey-70 u-shape-circle" style="width: 10px; height: 10px;"></li>'
-            carousel_indicators += "                          " + indicator_li + "\n"
+    # Удаление существующего блока по id="{name}"
+    start_tag = f'<section class="u-clearfix u-section-16" id="{name}">'
+    end_tag = "</section>"
+    start_pos = html_content.find(start_tag)
+    if start_pos != -1:
+        end_pos = html_content.find(end_tag, start_pos)
+        if end_pos != -1:
+            html_content = (
+                html_content[:start_pos] + html_content[end_pos + len(end_tag) :]
+            )
+            insert_index = html_content.lower().find("<footer")
 
-            item_div = f"""\
+    carousel_id = f"carousel-{name}"
+    carousel_indicators = ""
+    carousel_items = ""
+
+    for i, image_file in enumerate(images):
+        active_class = "u-active" if i == 0 else ""
+        indicator_li = f'<li data-u-target="#{carousel_id}" data-u-slide-to="{i}" class="{active_class} u-grey-70 u-shape-circle" style="width: 10px; height: 10px;"></li>'
+        carousel_indicators += "                          " + indicator_li + "\n"
+
+        item_div = f"""\
                           <div class="{active_class} u-carousel-item u-gallery-item u-carousel-item-{i+1}" data-image-width="960" data-image-height="1280">
                             <div class="u-back-slide">
                               <img class="u-back-image u-expanded" src="images/{real_folder_name}/{image_file}">
@@ -101,9 +104,9 @@ with open(csv_path, newline="", encoding="utf-8") as csvfile:
                               <style data-mode="SM"></style>
                               <style data-mode="XS"></style>
                           </div>"""
-            carousel_items += item_div + "\n"
+        carousel_items += item_div + "\n"
 
-        block = f"""
+    block = f"""
     <section class="u-clearfix u-section-16" id="{name}">
       <div class="u-clearfix u-sheet u-valign-middle-md u-valign-top-lg u-valign-top-xl u-sheet-1">
         <div class="data-layout-selected u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
@@ -120,12 +123,12 @@ with open(csv_path, newline="", encoding="utf-8") as csvfile:
 {carousel_items}                        </div>
                         <a class="u-absolute-vcenter u-carousel-control u-carousel-control-prev u-grey-70 u-icon-circle u-opacity u-opacity-70 u-spacing-10 u-text-white u-carousel-control-1" href="#{carousel_id}" role="button" data-u-slide="prev">
                           <span aria-hidden="true">
-                            <svg viewBox="0 0 24 24"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
                           </span><span class="sr-only">Previous</span>
                         </a>
                         <a class="u-absolute-vcenter u-carousel-control u-carousel-control-next u-grey-70 u-icon-circle u-opacity u-opacity-70 u-spacing-10 u-text-white u-carousel-control-2" href="#{carousel_id}" role="button" data-u-slide="next">
                           <span aria-hidden="true">
-                            <svg viewBox="0 0 24 24"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
                           </span><span class="sr-only">Next</span>
                         </a>
                       </div>
@@ -156,18 +159,17 @@ with open(csv_path, newline="", encoding="utf-8") as csvfile:
       </div>
     </section>"""
 
-        # === Вставка перед <footer> ===
-        html_content = (
-            html_content[:insert_index] + block + "\n" + html_content[insert_index:]
-        )
-        insert_index += len(block)
+    # === Вставка перед <footer> ===
+    html_content = (
+        html_content[:insert_index] + block + "\n" + html_content[insert_index:]
+    )
+    insert_index += len(block)
 
 # === Добавление навигационного меню после </header> ===
 nav_menu = "<nav class='u-nav u-unstyled' style='display:flex; justify-content:center; margin:20px 0;'><ul class='u-unstyled' style='list-style:none; padding:0; display:flex; flex-wrap:wrap; gap:15px;'>"
-for name, title in [
-    (row["Name"].strip(), row["Title"].strip())
-    for row in csv.DictReader(open(csv_path, newline="", encoding="utf-8"))
-]:
+for row in reader:
+    name = row["Name"].strip()
+    title = row["Title"].strip()
     nav_menu += f'<li><a href="#{name}">{title}</a></li>'
 nav_menu += "</ul></nav>"
 
