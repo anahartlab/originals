@@ -8,7 +8,7 @@ os.chdir(repo_root)
 
 # === Параметры ===
 csv_path = "products.csv"
-html_path = "index.html"
+html_path = "originals.html"
 images_dir = "images"
 valid_exts = {".jpg", ".jpeg", ".png"}
 
@@ -30,7 +30,7 @@ if header_end != -1 and footer_start != -1 and header_end < footer_start:
 
 insert_index = html_content.lower().find("<footer")
 if insert_index == -1:
-    print("❌ Не найден <footer> index.html")
+    print("❌ Не найден <footer> originals.html")
     exit()
 
 # === Читаем CSV ===
@@ -183,4 +183,4 @@ else:
 with open(html_path, "w", encoding="utf-8") as f:
     f.write(html_content)
 
-print("✅ Все товары из CSV добавлены в index.html")
+print("✅ Все товары из CSV добавлены в originals.html")
