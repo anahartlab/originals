@@ -1,5 +1,10 @@
 import os
 import csv
+import sys
+
+# === Установка рабочей директории (если скрипт запущен не из корня репозитория) ===
+repo_root = os.path.dirname(os.path.abspath(__file__))
+os.chdir(repo_root)
 
 # === Параметры ===
 csv_path = "products.csv"
@@ -37,7 +42,7 @@ with open(csv_path, newline="", encoding="utf-8") as csvfile:
         description = row["Description"].strip()
         size = row["Size"].strip()
         paint = row["Paint"].strip()
-        material = row[" Material"].strip()
+        material = row["Material"].strip()
         type_ = row["Type"].strip()
         price = row["Price"].strip()
         place = row["Place"].strip()
@@ -170,8 +175,3 @@ with open(html_path, "w", encoding="utf-8") as f:
     f.write(html_content)
 
 print("✅ Все товары из CSV добавлены в index.html")
-import sys
-
-# === Установка рабочей директории (если скрипт запущен не из корня репозитория) ===
-repo_root = os.path.dirname(os.path.abspath(__file__))
-os.chdir(repo_root)
