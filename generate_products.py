@@ -46,10 +46,17 @@ with open(csv_path, newline="", encoding="utf-8") as csvfile:
         type_ = row["Type"].strip()
         price = row["Price"].strip()
         place = row["Place"].strip()
-        folder_path = os.path.join(images_dir, name)
 
-        if not os.path.isdir(folder_path):
-            print(f"⚠️  Пропущен '{name}' — папка '{folder_path}' не найдена.")
+        # Поиск папки с игнорированием регистра
+        folder_path = None
+        for folder in os.listdir(images_dir):
+            if folder.lower() == name.lower() and os.path.isdir(os.path.join(images_dir, folder)):
+                folder_path = os.path.join(images_dir, folder)
+                real_folder_name = folder
+                break
+
+        if not folder_path:
+            print(f"⚠️  Пропущен '{name}' — папка '{os.path.join(images_dir, name)}' не найдена.")
             continue
 
         images = [
@@ -85,7 +92,7 @@ with open(csv_path, newline="", encoding="utf-8") as csvfile:
             item_div = f"""\
                           <div class="{active_class} u-carousel-item u-gallery-item u-carousel-item-{i+1}" data-image-width="960" data-image-height="1280">
                             <div class="u-back-slide">
-                              <img class="u-back-image u-expanded" src="images/{name}/{image_file}">
+                              <img class="u-back-image u-expanded" src="images/{real_folder_name}/{image_file}">
                             </div>
                             <div class="u-align-center u-over-slide u-shading u-valign-bottom u-over-slide-{i+1}"></div>
                               <style data-mode="XL"></style>
