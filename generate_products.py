@@ -73,11 +73,11 @@ with open(csv_path, newline="", encoding="utf-8") as csvfile:
                 )
                 insert_index = html_content.lower().find("<footer")
 
-        carousel_id = f"carousel-{name[:8]}"
+        carousel_id = f"carousel-{name}"
         carousel_indicators = ""
         carousel_items = ""
 
-        for i, img_name in enumerate(images):
+        for i, image_file in enumerate(images):
             active_class = "u-active" if i == 0 else ""
             indicator_li = f'<li data-u-target="#{carousel_id}" data-u-slide-to="{i}" class="{active_class} u-grey-70 u-shape-circle" style="width: 10px; height: 10px;"></li>'
             carousel_indicators += "                          " + indicator_li + "\n"
@@ -85,7 +85,7 @@ with open(csv_path, newline="", encoding="utf-8") as csvfile:
             item_div = f"""\
                           <div class="{active_class} u-carousel-item u-gallery-item u-carousel-item-{i+1}" data-image-width="960" data-image-height="1280">
                             <div class="u-back-slide">
-                              <img class="u-back-image u-expanded" src="images/{name}/{img_name}">
+                              <img class="u-back-image u-expanded" src="images/{name}/{image_file}">
                             </div>
                             <div class="u-align-center u-over-slide u-shading u-valign-bottom u-over-slide-{i+1}"></div>
                             <style data-mode="XL"></style>
@@ -106,7 +106,7 @@ with open(csv_path, newline="", encoding="utf-8") as csvfile:
                 <div class="u-layout-col">
                   <div class="u-container-style u-layout-cell u-size-60 u-layout-cell-1">
                     <div class="u-container-layout u-valign-middle-lg u-valign-middle-sm u-valign-middle-xs u-container-layout-1">
-                      <div class="custom-expanded u-carousel u-gallery u-gallery-slider u-layout-carousel u-lightbox u-no-transition u-show-text-none u-gallery-1" data-interval="5000" data-u-ride="carousel" id="{carousel_id}">
+                      <div class="custom-expanded u-carousel u-gallery u-gallery-slider u-layout-carousel u-lightbox u-no-transition u-show-text-none u-gallery-{name}" data-interval="5000" data-u-ride="carousel" id="{carousel_id}">
                         <ol class="u-absolute-hcenter u-carousel-indicators u-carousel-indicators-1">
 {carousel_indicators}                        </ol>
                         <div class="u-carousel-inner u-gallery-inner u-gallery-inner-1" role="listbox">
