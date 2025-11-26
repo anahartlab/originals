@@ -5,10 +5,10 @@ import os
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Путь к файлу HTML в той же папке
-html_file = os.path.join(current_dir, 'main.html')
+html_file = os.path.join(current_dir, "main.html")
 
 # Путь к папке с изображениями в той же папке
-images_root = os.path.join(current_dir, 'images')
+images_root = os.path.join(current_dir, "images")
 
 # Читаем HTML
 with open(html_file, "r", encoding="utf-8") as f:
@@ -45,7 +45,9 @@ for section in soup.find_all("section", class_="u-clearfix u-section-16"):
     icon_src = None
     if os.path.exists(folder_path):
         for file_name in os.listdir(folder_path):
-            if file_name.lower().startswith("main") and file_name.lower().endswith((".jpg", ".jpeg", ".png")):
+            if file_name.lower().startswith("main") and file_name.lower().endswith(
+                (".jpg", ".jpeg", ".png")
+            ):
                 icon_src = f"images/{folder_name}/{file_name}"
                 break
         if not icon_src:
@@ -65,7 +67,9 @@ for section in soup.find_all("section", class_="u-clearfix u-section-16"):
     )
     if icon_src:
         img = soup.new_tag("img", src=icon_src)
-        img["style"] = "width:50px; height:50px; object-fit:cover; border-radius:5px; margin-right:8px;"
+        img["style"] = (
+            "width:50px; height:50px; object-fit:cover; border-radius:5px; margin-right:8px;"
+        )
         a.append(img)
     span = soup.new_tag("span")
     span.string = title
@@ -75,6 +79,18 @@ for section in soup.find_all("section", class_="u-clearfix u-section-16"):
 
 header = soup.find("header")
 if header:
+    # Удаляем все старые кнопки с id 'scroll-to-menu'
+    for old_button in soup.find_all(id="scroll-to-menu"):
+        old_button.decompose()
+
+    # Удаляем все старые скрипты, содержащие 'scroll-to-menu' или 'scrollIntoView'
+    for script_tag in soup.find_all("script"):
+        if script_tag.string and (
+            "scroll-to-menu" in script_tag.string
+            or "scrollIntoView" in script_tag.string
+        ):
+            script_tag.decompose()
+
     header.insert_after(nav)
 
     # Добавляем фиксированную кнопку "В меню" в правом нижнем углу
@@ -87,13 +103,18 @@ if header:
     )
     nav.insert_after(button)
 
-    # Добавляем скрипт для плавного скролла к навигации при нажатии на кнопку
     script = soup.new_tag("script")
-    script.string = (
-        "document.getElementById('scroll-to-menu').addEventListener('click', function() {"
-        "  document.querySelector('nav.u-nav').scrollIntoView({ behavior: 'smooth' });"
-        "});"
-    )
+    script.string = """
+document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('scroll-to-menu');
+    var nav = document.querySelector('nav.u-nav.u-center');
+    if(btn && nav){
+        btn.addEventListener('click', function() {
+            nav.scrollIntoView({ behavior: 'smooth' });
+        });
+    }
+});
+"""
     button.insert_after(script)
 
 style_tag = soup.new_tag("style")
