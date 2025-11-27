@@ -8,8 +8,8 @@ repo_root = os.path.dirname(os.path.abspath(__file__))
 os.chdir(repo_root)
 
 # === Параметры ===
-csv_path = "philosophy.csv"
-html_path = "philosophy.html"
+csv_path = "mountains.csv"
+html_path = "mountains.html"
 images_dir = "images"
 valid_exts = {".jpg", ".jpeg", ".png"}
 
@@ -94,6 +94,10 @@ with open(csv_path, newline="", encoding="utf-8") as csvfile:
         type_p = row.get("type", "")
         place = row.get("place", "")
 
+        seo_title = row.get("seo title", "")
+        seo_description = row.get("seo description", "")
+        seo_keywords = row.get("seo keywords", "")
+
 
         # Формируем основной текст по шаблону
         full_description_html = (
@@ -138,6 +142,9 @@ with open(csv_path, newline="", encoding="utf-8") as csvfile:
 
         block = f"""
     <section class="u-clearfix u-section-16" id="{name}">
+      <meta name="title" content="{seo_title}">
+      <meta name="description" content="{seo_description}">
+      <meta name="keywords" content="{seo_keywords}">
       <div class="u-clearfix u-sheet u-valign-middle-md u-valign-top-lg u-valign-top-xl u-sheet-1">
         <div class="data-layout-selected u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
           <div class="u-layout">
