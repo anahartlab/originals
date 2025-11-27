@@ -8,8 +8,8 @@ repo_root = os.path.dirname(os.path.abspath(__file__))
 os.chdir(repo_root)
 
 # === Параметры ===
-csv_path = "products.csv"
-html_path = "main.html"
+csv_path = "philosophy.csv"
+html_path = "philosophy.html"
 images_dir = "images"
 valid_exts = {".jpg", ".jpeg", ".png"}
 
@@ -94,9 +94,6 @@ with open(csv_path, newline="", encoding="utf-8") as csvfile:
         type_p = row.get("type", "")
         place = row.get("place", "")
 
-        seo_title = row.get("seo title", title)
-        seo_description = row.get("seo description", "")
-        seo_keywords = row.get("seo keywords", "")
 
         # Формируем основной текст по шаблону
         full_description_html = (
@@ -195,7 +192,7 @@ with open(csv_path, newline="", encoding="utf-8") as csvfile:
 with open(html_path, "w", encoding="utf-8") as f:
     f.write(html_content)
 
-print("✅ Все товары из CSV добавлены в main.html")
+print("✅ Все товары из CSV добавлены в .html")
 
 import sys
 
